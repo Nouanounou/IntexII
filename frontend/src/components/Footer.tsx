@@ -11,6 +11,9 @@ const Footer: React.FC = () => {
         <span>Phone: 123-456-7890</span>
         <span>Address: 123 Movie Lane, Filmtown</span>
         <a href="/contact">Contact Us</a>
+        <footer className="py-6 px-6 border-t border-zinc-800 text-center text-sm text-gray-400">
+          <p>© 2025 CineNiche. All Rights Reserved.</p>
+        </footer>
       </div>
     </footer>
   );

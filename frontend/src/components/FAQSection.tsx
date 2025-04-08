@@ -1,51 +1,56 @@
-import React, { useState } from 'react';
-import '../styles/FAQSection.css';
+import { useState } from 'react';
 
-interface FAQItemProps {
-  question: string;
-  answer: string;
-}
+// Default FAQs - can be passed as props instead
+const defaultFaqs = [
+  {
+    question: 'What is CineNiche?',
+    answer:
+      'CineNiche is a streaming platform dedicated to offering unique, curated content that mainstream services often overlook. We focus on independent films, international cinema, and niche genres that passionate movie lovers appreciate.',
+  },
+  {
+    question: 'How do I sign up?',
+    answer:
+      "Signing up is easy! Click the 'Register' button at the top of the page, fill in your information, select a subscription plan, and start streaming your favorite niche content immediately.",
+  },
+  {
+    question: 'How do I contact support?',
+    answer:
+      "You can reach our support team by emailing support@cineniche.com or through the 'Help' section in your account menu. We're available 24/7 to assist with any questions or concerns.",
+  },
+];
 
-const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
-  const [open, setOpen] = useState(false);
+export default function FAQSection({ faqs = defaultFaqs }) {
+  const [expandedFaq, setExpandedFaq] = useState(null);
+
+  const toggleFaq = (index) => {
+    setExpandedFaq(expandedFaq === index ? null : index);
+  };
+
   return (
-    <div className="faq-item">
-      <div className="faq-question" onClick={() => setOpen(!open)}>
-        <span>{question}</span>
-        <span className="faq-toggle">{open ? '-' : '+'}</span>
+    <div className="py-12 px-6 bg-zinc-800">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-semibold mb-8">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-4">
+          {faqs.map((faq, index) => (
+            <div key={index} className="border-b border-zinc-700 pb-2">
+              <button
+                className="flex justify-between items-center w-full py-4 text-left text-lg font-medium hover:text-teal-400 transition"
+                onClick={() => toggleFaq(index)}
+              >
+                <span>{faq.question}</span>
+                <span className="text-2xl">
+                  {expandedFaq === index ? '−' : '+'}
+                </span>
+              </button>
+              {expandedFaq === index && (
+                <div className="pb-4 text-gray-300">{faq.answer}</div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-      {open && <div className="faq-answer">{answer}</div>}
     </div>
   );
-};
-
-const FAQSection: React.FC = () => {
-  const faqs = [
-    {
-      question: 'What is CineNiche?',
-      answer:
-        'CineNiche is a curated movie streaming service offering cult classics, indie films, and niche documentaries.',
-    },
-    {
-      question: 'How do I sign up?',
-      answer:
-        'Click on the Sign Up link at the bottom and follow the registration process.',
-    },
-    {
-      question: 'How do I contact support?',
-      answer:
-        'You can reach our support team via email at support@cineniche.com or call 123-456-7890.',
-    },
-  ];
-
-  return (
-    <section className="faq-section">
-      <h2>Frequently Asked Questions</h2>
-      {faqs.map((faq, index) => (
-        <FAQItem key={index} question={faq.question} answer={faq.answer} />
-      ))}
-    </section>
-  );
-};
-
-export default FAQSection;
+}
