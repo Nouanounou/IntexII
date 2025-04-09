@@ -355,7 +355,7 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieFormProps) => {
                 padding: '10px 16px',
                 borderRadius: '4px',
                 border: '1px solid #ddd',
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#ff0000',
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: '500',

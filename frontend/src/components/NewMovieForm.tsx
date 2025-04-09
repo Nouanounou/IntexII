@@ -67,6 +67,7 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
 
   return (
     // Overlay with backdrop blur effect
+
     <div
       style={{
         position: 'fixed',
@@ -94,8 +95,20 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
           overflow: 'auto',
           padding: '0',
           animation: 'modalFadeIn 0.3s ease-out',
+          WebkitOverflowScrolling: 'touch',
+
+          scrollbarWidth: 'none', // Firefox
+          msOverflowStyle: 'none', // IE and Edge
         }}
       >
+        <style>
+          {`
+    div::-webkit-scrollbar {
+      display: none;
+    }
+  `}
+        </style>
+
         {/* Header */}
         <div
           style={{
@@ -194,6 +207,7 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
                   borderRadius: '4px',
                   border: '1px solid #ddd',
                 }}
+                placeholder="First Name, Last Name"
                 required
               />
             </div>
@@ -367,6 +381,7 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
                 minHeight: '100px',
                 resize: 'vertical',
               }}
+              placeholder="Provide a brief description of the plot or the main story line"
             />
           </div>
 
@@ -387,7 +402,7 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieFormProps) => {
                 padding: '10px 16px',
                 borderRadius: '4px',
                 border: '1px solid #ddd',
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#ff0000',
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: '500',
