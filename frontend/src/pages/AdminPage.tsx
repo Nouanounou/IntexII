@@ -83,7 +83,7 @@ const AdminPage = () => {
             fontWeight: '600',
           }}
         >
-          Admin - Movie Management
+          Admin - Content Management
         </h1>
 
         {!showForm && !editingMovie && (
