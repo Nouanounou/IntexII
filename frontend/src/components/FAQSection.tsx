@@ -13,6 +13,11 @@ const defaultFaqs = [
       "Signing up is easy! Click the 'Register' button at the top of the page, fill in your information, select a subscription plan, and start streaming your favorite niche content immediately.",
   },
   {
+    question: 'What devices does CineNiche support?',
+    answer:
+      'Despite serving a small content niche, CineNiche has seen rapid growth in its subscriber base and has developed apps for a wide range of platforms, including Windows, Mac, iOS, Android, Roku, AppleTV, GoogleTV, and more.',
+  },
+  {
     question: 'How do I contact support?',
     answer:
       "You can reach our support team by emailing support@cineniche.com or through the 'Help' section in your account menu. We're available 24/7 to assist with any questions or concerns.",

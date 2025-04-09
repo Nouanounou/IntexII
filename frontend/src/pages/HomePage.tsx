@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './HomePage.css';
 
 // Mock data for demonstration - replace with your API calls
 const mockGenres = [
@@ -8,55 +9,59 @@ const mockGenres = [
   'Horror',
   'Sci-Fi',
   'Thriller',
+  'Anime',
 ];
 
-const mockMovies = {
-  Action: Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `action-${i}`,
-      title: `Action Movie ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
-  Drama: Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `drama-${i}`,
-      title: `Drama ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
-  Comedy: Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `comedy-${i}`,
-      title: `Comedy ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
-  Horror: Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `horror-${i}`,
-      title: `Horror ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
-  'Sci-Fi': Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `scifi-${i}`,
-      title: `Sci-Fi ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
-  Thriller: Array(20)
-    .fill()
-    .map((_, i) => ({
-      id: `thriller-${i}`,
-      title: `Thriller ${i + 1}`,
-      posterUrl: '/api/placeholder/160/240',
-    })),
+// Updated mock data with featured hero images for each genre
+const mockGenreHeroImages = {
+  Action: {
+    id: 'action-hero',
+    title: 'Action',
+    imageUrl: '/api/placeholder/800/1000', // Larger placeholder for hero section
+    description:
+      'Explosive action content for thrill-seekers and adrenaline junkies.',
+  },
+  Drama: {
+    id: 'drama-hero',
+    title: 'Drama',
+    imageUrl: '/api/placeholder/800/1000',
+    description: 'Compelling stories of human emotion and struggle.',
+  },
+  Comedy: {
+    id: 'comedy-hero',
+    title: 'Comedy',
+    imageUrl: '/api/placeholder/800/1000',
+    description: 'Laugh-out-loud entertainment for the whole family.',
+  },
+  Horror: {
+    id: 'horror-hero',
+    title: 'Horror',
+    imageUrl: '/api/placeholder/800/1000',
+    description: 'Terrifying tales that will keep you up at night.',
+  },
+  'Sci-Fi': {
+    id: 'scifi-hero',
+    title: 'Sci-Fi',
+    imageUrl: '/api/placeholder/800/1000',
+    description: 'Mind-bending journeys through space, time and imagination.',
+  },
+  Thriller: {
+    id: 'thriller-hero',
+    title: 'Thriller',
+    imageUrl: '/api/placeholder/800/1000',
+    description: 'Edge-of-your-seat suspense and unexpected twists.',
+  },
+  Anime: {
+    id: 'anime-hero',
+    title: 'Anime',
+    imageUrl: '/api/placeholder/800/1000',
+    description:
+      'Where epic battles, and endless imagination collide — feel the adrenaline, live the saga',
+  },
 };
 
-// Create mock data for each section (more than 15 items to enable scrolling)
-const featuredMovies = Array(20)
+// Keep other movie data for the carousel rows
+const featuredMovies = Array(13)
   .fill()
   .map((_, i) => ({
     id: `featured-${i}`,
@@ -64,7 +69,7 @@ const featuredMovies = Array(20)
     posterUrl: '/api/placeholder/160/240',
   }));
 
-const trendingMovies = Array(20)
+const trendingMovies = Array(13)
   .fill()
   .map((_, i) => ({
     id: `trending-${i}`,
@@ -72,7 +77,7 @@ const trendingMovies = Array(20)
     posterUrl: '/api/placeholder/160/240',
   }));
 
-const familyMovies = Array(20)
+const familyMovies = Array(13)
   .fill()
   .map((_, i) => ({
     id: `family-${i}`,
@@ -80,14 +85,13 @@ const familyMovies = Array(20)
     posterUrl: '/api/placeholder/160/240',
   }));
 
-const undergroundMovies = Array(20)
+const undergroundMovies = Array(13)
   .fill()
   .map((_, i) => ({
     id: `underground-${i}`,
     title: `Underground Movie ${i + 1}`,
     posterUrl: '/api/placeholder/160/240',
   }));
-
 const faqs = [
   {
     question: 'What is CineNiche?',
@@ -100,19 +104,18 @@ const faqs = [
       "Signing up is easy! Click the 'Register' button at the top of the page, fill in your information, select a subscription plan, and start streaming your favorite niche content immediately.",
   },
   {
+    question: 'What devices does CineNiche support?', // ← ADD THIS
+    answer:
+      'CineNiche supports Windows, Mac, iOS, Android, Roku, AppleTV, GoogleTV, and more.',
+  },
+  {
     question: 'How do I contact support?',
     answer:
       "You can reach our support team by emailing support@cineniche.com or through the 'Help' section in your account menu. We're available 24/7 to assist with any questions or concerns.",
   },
 ];
 
-// CSS for hiding scrollbars
-const scrollbarHideStyles = {
-  msOverflowStyle: 'none', // IE and Edge
-  scrollbarWidth: 'none', // Firefox
-};
-
-// Scrollable movie row component with hover effects - no visible scrollbar
+// Scrollable movie row component with hover effects
 const MovieRow = ({ title, movies }) => {
   const scrollRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
@@ -120,7 +123,7 @@ const MovieRow = ({ title, movies }) => {
 
   // Auto-scroll effect when hovering
   useEffect(() => {
-    let animationId;
+    let animationId: number;
     const scrollSpeed = 0.5; // pixels per frame - adjust for faster/slower scrolling
 
     const autoScroll = () => {
@@ -150,37 +153,19 @@ const MovieRow = ({ title, movies }) => {
   }, [isHovering, scrollPosition]);
 
   return (
-    <div className="py-6 px-6">
-      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+    <div className="movie-row">
+      <h2>{title}</h2>
       <div
-        className="relative overflow-x-auto"
-        style={{
-          ...scrollbarHideStyles,
-          WebkitOverflowScrolling: 'touch',
-        }}
+        className="movie-scroll-container"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         ref={scrollRef}
       >
-        <style jsx>{`
-          /* Hide scrollbar for Chrome, Safari and Opera */
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
-        <div className="flex space-x-4 pb-4">
+        <div className="movie-items">
           {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="flex-shrink-0"
-              style={{ width: '160px' }}
-            >
-              <div className="aspect-[2/3] rounded overflow-hidden transition-all duration-300 transform hover:scale-110 hover:z-10 bg-zinc-700 cursor-pointer">
-                <img
-                  src={movie.posterUrl}
-                  alt={movie.title}
-                  className="w-full h-full object-cover"
-                />
+            <div key={movie.id} className="movie-item">
+              <div className="movie-poster">
+                <img src={movie.posterUrl} alt={movie.title} />
               </div>
             </div>
           ))}
@@ -192,12 +177,16 @@ const MovieRow = ({ title, movies }) => {
 
 export default function HomePage() {
   const [selectedGenre, setSelectedGenre] = useState(mockGenres[0]);
-  const [movies, setMovies] = useState([]);
+  const [currentHero, setCurrentHero] = useState(
+    mockGenreHeroImages[mockGenres[0]]
+  );
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   useEffect(() => {
-    // Simulate API fetch based on selected genre
-    setMovies(mockMovies[selectedGenre] || []);
+    // Update hero image when genre changes
+    setCurrentHero(
+      mockGenreHeroImages[selectedGenre] || mockGenreHeroImages[mockGenres[0]]
+    );
   }, [selectedGenre]);
 
   const toggleFaq = (index) => {
@@ -205,84 +194,63 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white">
+    <div className="home-container">
       {/* Header */}
-      <header className="py-4 px-6 flex justify-between items-center border-b border-zinc-800">
-        <div className="text-4xl font-bold">
-          <span className="text-teal-500">Cine</span>
-          <span className="text-gray-300">Niche</span>
+      <header className="header">
+        <div className="brand">
+          <span className="brand-cine">Cine</span>
+          <span className="brand-niche">Niche</span>
         </div>
       </header>
 
       <main>
         {/* Hero Section */}
-        <div className="flex flex-col md:flex-row">
+        <div className="hero-section">
           {/* Left Panel - Branding */}
-          <div className="w-full md:w-2/5 bg-gray-200 p-8 flex flex-col justify-between text-black">
-            <div>
-              <div className="mt-24">
-                <h1 className="text-4xl md:text-5xl font-bold text-zinc-800 mb-6">
-                  Not Mainstream.
-                  <br />
-                  Your Niche - Stream
-                </h1>
+          <div className="hero-left">
+            <div className="hero-content">
+              <h1 className="hero-title">
+                Not Mainstream.
+                <br />
+                Your Niche - Stream
+              </h1>
 
-                <h2 className="text-2xl text-zinc-700 mb-6">
-                  Find what the mainstream missed.
-                  <br />
-                  Stream your obsession
-                </h2>
+              <h2 className="hero-subtitle">
+                Find what the mainstream missed.
+                <br />
+                Stream your obsession
+              </h2>
 
-                <div className="border-t border-gray-400 my-8"></div>
+              <div className="hero-divider"></div>
 
-                <div className="flex gap-4 mt-4">
-                  <button className="px-6 py-2 border border-gray-500 rounded-md hover:bg-gray-300 transition">
-                    Sign in
-                  </button>
-                  <button className="px-6 py-2 bg-zinc-800 text-white rounded-md hover:bg-zinc-700 transition">
-                    Register
-                  </button>
-                </div>
+              <div className="hero-buttons">
+                <button className="btn-signin">Sign in</button>
+                <button className="btn-register">Register</button>
               </div>
             </div>
 
-            <div className="mt-16">
-              <div className="flex text-sm text-zinc-700">
-                <a href="#" className="hover:underline mr-4">
+            <div className="hero-footer">
+              <div className="hero-links">
+                <a href="#" className="footer-link">
                   Privacy Policy
                 </a>
                 <span>|</span>
-                <a href="#" className="hover:underline ml-4">
+                <a href="#" className="footer-link">
                   Help
                 </a>
-              </div>
-              <div className="text-sm text-zinc-700 mt-2">
-                © 2025 NicheCinema. All Rights Reserved.
               </div>
             </div>
           </div>
 
-          {/* Right Panel - Content */}
-          <div className="w-full md:w-3/5 p-6">
+          {/* Right Panel - Hero Image */}
+          <div className="hero-right">
             {/* Genres Tab Navigation */}
-            <div className="border-b border-zinc-800 mb-6">
-              <nav
-                className="flex space-x-8 overflow-x-auto pb-2"
-                style={scrollbarHideStyles}
-              >
-                <style jsx>{`
-                  nav::-webkit-scrollbar {
-                    display: none;
-                  }
-                `}</style>
+            <div className="genre-nav-container">
+              <nav className="genre-nav">
                 {mockGenres.map((genre) => (
                   <button
                     key={genre}
-                    className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
-                      selectedGenre === genre
-                        ? 'border-b-2 border-teal-500 text-teal-500'
-                        : 'text-gray-400 hover:text-gray-200'
-                    }`}
+                    className={`genre-btn ${selectedGenre === genre ? 'active' : ''}`}
                     onClick={() => setSelectedGenre(genre)}
                   >
                     {genre}
@@ -291,63 +259,51 @@ export default function HomePage() {
               </nav>
             </div>
 
-            {/* Scrollable Movie Row for Selected Genre - no visible scrollbar */}
-            <div
-              className="relative overflow-x-auto"
-              style={scrollbarHideStyles}
-            >
-              <style jsx>{`
-                div::-webkit-scrollbar {
-                  display: none;
-                }
-              `}</style>
-              <div className="flex space-x-4 pb-4">
-                {movies.slice(0, 15).map((movie) => (
-                  <div
-                    key={movie.id}
-                    className="flex-shrink-0"
-                    style={{ width: '160px' }}
-                  >
-                    <div className="aspect-[2/3] rounded overflow-hidden transition-all duration-300 transform hover:scale-110 hover:z-10 bg-zinc-700 cursor-pointer">
-                      <img
-                        src={movie.posterUrl}
-                        alt={movie.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                ))}
+            {/* Hero Image for Selected Genre */}
+            <div className="hero-image-container">
+              <div className="genre-overlay">
+                <h3 className="genre-title">{currentHero.title}</h3>
+                <p className="genre-description">{currentHero.description}</p>
               </div>
+              <img
+                src={currentHero.imageUrl}
+                alt={currentHero.title}
+                className="hero-image"
+              />
             </div>
           </div>
         </div>
 
-        {/* Movie Sections with horizontal scrolling - no visible scrollbars */}
+        {/* Movie Sections with horizontal scrolling */}
         <MovieRow title="Featured Movies" movies={featuredMovies} />
         <MovieRow title="Trending This Year" movies={trendingMovies} />
         <MovieRow title="Family Favorites" movies={familyMovies} />
         <MovieRow title="Underground Icons" movies={undergroundMovies} />
 
         {/* FAQ Section */}
-        <div className="py-12 px-6 bg-zinc-800">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-semibold mb-8">
-              Frequently Asked Questions
+        <div className="faq-section">
+          <div className="faq-container">
+            <h2 className="faq-title">
+              Niche Questions?{' '}
+              <span style={{ fontStyle: 'italic', fontWeight: 'normal' }}>
+                We've got niche answers
+              </span>
             </h2>
-            <div className="space-y-4">
+
+            <div className="faq-items">
               {faqs.map((faq, index) => (
-                <div key={index} className="border-b border-zinc-700 pb-2">
+                <div key={index} className="faq-item">
                   <button
-                    className="flex justify-between items-center w-full py-4 text-left text-lg font-medium hover:text-teal-400 transition"
+                    className="faq-question"
                     onClick={() => toggleFaq(index)}
                   >
                     <span>{faq.question}</span>
-                    <span className="text-2xl">
+                    <span className="faq-toggle">
                       {expandedFaq === index ? '−' : '+'}
                     </span>
                   </button>
                   {expandedFaq === index && (
-                    <div className="pb-4 text-gray-300">{faq.answer}</div>
+                    <div className="faq-answer">{faq.answer}</div>
                   )}
                 </div>
               ))}
@@ -356,7 +312,7 @@ export default function HomePage() {
         </div>
       </main>
 
-      <footer className="py-6 px-6 border-t border-zinc-800 text-center text-sm text-gray-400">
+      <footer className="main-footer">
         <p>© 2025 CineNiche. All Rights Reserved.</p>
       </footer>
     </div>
