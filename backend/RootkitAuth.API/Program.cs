@@ -1,35 +1,52 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RootkitAuth.API.Data;
 using RootkitAuth.API.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+
 
 DotNetEnv.Env.Load();
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.AddConsole();
-builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
-builder.Services.AddDbContext<MovieRecDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("RecommendationConnection"))
-        .EnableSensitiveDataLogging()
-        .LogTo(Console.WriteLine, LogLevel.Information));
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//connect to databases
 builder.Services.AddDbContext<MovieDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>  
-    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 
-// Add this line with the other DbContext registrations
 builder.Services.AddDbContext<MovieRecDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RecommendationConnection")));
+
+
+// Allow google sign in
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie() // <-- This is important
+.AddGoogle(options =>
+{
+    options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") ?? throw new InvalidOperationException("Missing GOOGLE_CLIENT_ID");
+    options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") ?? throw new InvalidOperationException("Missing GOOGLE_CLIENT_SECRET");
+
+});
+
+
 
 builder.Services.AddAuthorization();
 
@@ -37,7 +54,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
      .AddEntityFrameworkStores<ApplicationDbContext>()
      .AddDefaultTokenProviders();
 
-
+// add this for security
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
@@ -74,7 +91,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 
+
 var app = builder.Build();
+
+
+// remove later
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Incoming request: {context.Request.Method} {context.Request.Path}");
+    await next();
+});
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -106,7 +135,8 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     });
 
     return Results.Ok(new { message = "Logout successful" });
-}).RequireAuthorization();
+}).RequireAuthorization()
+.RequireCors("AllowFrontend");;
 
 app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
 {
@@ -122,7 +152,8 @@ app.MapGet("/pingauth", (HttpContext context, ClaimsPrincipal user) =>
     Console.WriteLine($"Authenticated User Email: {email}");
 
     return Results.Json(new { email = email });
-}).RequireAuthorization();
+}).RequireAuthorization()
+.RequireCors("AllowFrontend");;
 
 app.Run();
 
