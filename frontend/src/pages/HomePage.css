@@ -14,7 +14,6 @@ html {
   overflow-x: hidden;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #18181b; /* zinc-900 */
-  color: #ffffff;
 }
 
 /* Main Container */
@@ -74,25 +73,71 @@ main {
   }
 }
 
-/* Hero Left - Branding */
 .hero-left {
   width: 100%;
-  background-color: #e5e7eb; /* gray-200 */
-  background-image: linear-gradient(
+  /* Remove the old background-color, or keep it as fallback: */
+  background: #e5e7eb; /* fallback for older browsers */
+
+  /* Vibrant teal-blue gradient from left to right */
+  background: linear-gradient(
     to right,
-    #e5e7eb 85%,
-    rgba(229, 231, 235, 0)
-  ); /* Gradient fade out to right */
+    #abd3ce,
+    /* teal-400 */ #e5eaf2 /* blue-500 */
+  );
+
   padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #000000;
+  color: #ffffff; /* Light text for readability on darker background */
   position: relative;
-  z-index: 2; /* Ensure text is above any overlays */
-  /* New styles for rounded edges */
-  border-radius: 10px; /* Adjust the value for more or less rounding */
-  overflow: hidden; /* Ensures child elements don't overflow the rounded corners */
+  z-index: 2;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Box Shadows for Different Genres */
+.hero-left.action {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 0, 0, 0.5) -3px -3px 6px 1px inset; /* Red Shadow for Action */
+}
+
+.hero-left.drama {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(10, 218, 233, 0.5) -3px -3px 6px 1px inset; /* Blue Shadow for Drama */
+}
+
+.hero-left.comedy {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(181, 157, 20, 0.74) -3px -3px 6px 1px inset; /* Green Shadow for Comedy */
+}
+
+.hero-left.horror {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(77, 54, 6, 0.976) -3px -3px 10px 1px inset; /* Purple Shadow for Horror */
+}
+
+.hero-left.sci-fi {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(208, 157, 4, 0.921) -3px -3px 10px 1px inset; /* Orange Shadow for Sci-Fi */
+}
+
+.hero-left.thriller {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(67, 67, 60, 0.5) -3px -3px 10px 1px inset; /* Yellow Shadow for Thriller */
+}
+
+.hero-left.anime {
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 20, 147, 0.5) -3px -3px 6px 1px inset; /* Deep Pink Shadow for Anime */
 }
 
 @media (min-width: 768px) {
@@ -146,10 +191,15 @@ main {
   transition: background-color 0.3s;
   color: #000000;
   background-color: #14b8a6;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5); /* brief shadow under the button */
 }
 
 .btn-signin:hover {
-  background-color: #d1d5db; /* gray-300 */
+  background: linear-gradient(
+    45deg,
+    #14b8a6,
+    #485265
+  ); /* gray-300 to gray-500 gradient */
 }
 
 .btn-register {
@@ -160,10 +210,15 @@ main {
   border-radius: 0.375rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6); /* brief shadow under the button */
 }
 
 .btn-register:hover {
-  background-color: #3f3f46; /* zinc-700 */
+  background: linear-gradient(
+    45deg,
+    #3f3f46,
+    #6b7280
+  ); /* zinc-700 to gray-500 gradient */
 }
 
 .hero-footer {
@@ -217,7 +272,10 @@ main {
   background-color: rgba(24, 24, 27, 0.3); /* Semi-transparent background */
   z-index: 10;
   position: relative;
-  border-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .genre-nav {
@@ -273,6 +331,14 @@ main {
   flex: 1;
   position: relative;
   overflow: hidden;
+
+  /* Only round top-right and bottom-right corners */
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 10px;
+
+  /* Flat left side */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .hero-image {
@@ -302,7 +368,14 @@ main {
   );
   z-index: 5;
   /* Added border-radius for rounded edges */
-  border-radius: 10px; /* Adjust this value for more or less roundness */
+
+  /* Rounded on the right only */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  /* Flat left side */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .genre-title {
@@ -317,40 +390,6 @@ main {
   font-size: 1rem;
   color: #d1d5db; /* gray-300 */
   max-width: 80%;
-}
-
-/* Movie Rows */
-.movie-row {
-  padding: 1.5rem;
-}
-
-.movie-row h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #ffffff;
-}
-
-.movie-scroll-container {
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  -webkit-overflow-scrolling: touch;
-}
-
-.movie-scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.movie-items {
-  display: flex;
-  gap: 1rem;
-  padding-bottom: 1rem;
-}
-
-.movie-item {
-  flex-shrink: 0;
-  width: 160px;
 }
 
 .movie-poster {
@@ -376,39 +415,66 @@ main {
 
 /* FAQ Section */
 .faq-section {
-  padding: 3rem 1.5rem;
+  padding: 4rem 20rem;
   background-color: #27272a; /* zinc-800 */
+  text-align: left;
+  color: white;
+  line-height: 1.4; /* Optional: helps maintain readability */
+}
+
+.faq-section h2 {
+  font-size: 1.5rem; /* Adjust heading size */
+  text-align: center;
+  margin-bottom: 2rem; /* Adjust the rem value as needed */
+}
+
+.italic-part {
+  font-style: italic;
+  font-weight: 200;
 }
 
 .faq-container {
-  max-width: 56rem;
+  max-width: 45rem;
   margin: 0 auto;
+  max-width: 600px; /* Adjust as needed for desired width */
+  width: 100%;
 }
 
 .faq-title {
   font-size: 1.875rem;
   font-weight: 600;
-  margin-bottom: 2rem;
-  color: #ffffff;
+  margin-bottom: 10rem;
+  color: white;
+  text-align: center;
 }
 
 .faq-items {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 10rem 1rem;
   gap: 1rem;
 }
 
 .faq-item {
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #3f3f46; /* zinc-700 */
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 0.375rem; /* Subtle border-radius (rounded corners) */
+}
+
+.faq-item:hover {
+  box-shadow: rgb(38, 57, 77) 0px 10px 15px -5px;
 }
 
 .faq-question {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 1rem 0;
+  width: 97%; /* Retaining width but ensuring padding for spacing */
+  padding: 0.75rem 1rem; /* Decrease top/bottom padding, increase left/right */
   text-align: left;
   font-size: 1.125rem;
   font-weight: 500;
@@ -431,6 +497,20 @@ main {
 .faq-answer {
   padding-bottom: 1rem;
   color: #d1d5db; /* gray-300 */
+  width: 95%; /* Retaining width but ensuring padding for spacing */
+  padding: 0.75rem 1rem; /* Decrease top/bottom padding, increase left/right */
+}
+
+/* The symbol (+ or –) */
+.faq-toggle {
+  margin-left: 0.5rem;
+  font-size: 1.5rem;
+  transition: color 0.3s;
+}
+
+/* Optionally change the symbol’s color on hover */
+.faq-question:hover .faq-toggle {
+  color: #14b8a6; /* teal-400 */
 }
 
 /* Footer */

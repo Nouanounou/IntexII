@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 // Default FAQs - can be passed as props instead
 const defaultFaqs = [
@@ -27,7 +27,7 @@ const defaultFaqs = [
 export default function FAQSection({ faqs = defaultFaqs }) {
   const [expandedFaq, setExpandedFaq] = useState(null);
 
-  const toggleFaq = (index) => {
+  const toggleFaq = (index: number | SetStateAction<null>) => {
     setExpandedFaq(expandedFaq === index ? null : index);
   };
 
